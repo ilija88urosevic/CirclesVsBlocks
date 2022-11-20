@@ -5,22 +5,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-public class Configuration
-{
-    internal void LoadData(string v)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal string GetStringData()
-    {
-        throw new NotImplementedException();
-    }
-}
 
 public class LoadingManager : MonoBehaviour
 {
-    public Configuration configData;
+    public ConfigurationSO configData;
     public static string CONFIG_URL = @"https://raw.githubusercontent.com/ilija88urosevic/CirclesVsBlocks/main/Config.txt";
     [SerializeField]
     private Image progressBarImage;
@@ -35,7 +23,15 @@ public class LoadingManager : MonoBehaviour
         }
         yield return StartCoroutine(LoadConfig());
         yield return new WaitForSeconds(1);
-        SceneManager.LoadScene(1);
+        progressBarImage.fillAmount = 0.7f;
+        AsyncOperation operation = SceneManager.LoadSceneAsync(1,LoadSceneMode.Single);
+        operation.allowSceneActivation = false;
+        while(!operation.isDone)
+        {
+            progressBarImage.fillAmount = 0.7f + operation.progress*0.3f;
+            yield return null;
+        }
+        operation.allowSceneActivation = true;
     }
 
     private IEnumerator LoadConfig()
