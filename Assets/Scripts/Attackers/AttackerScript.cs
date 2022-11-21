@@ -2,38 +2,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class AttackerScript : MonoBehaviour
 {
     public string header;
     public UpgradeView upgradeButton;
     private int upgradeLevel = 1;
-    Action<int,Transform> changeCoins;
-    public void Init(int level, EventHandler coinsEvent, Action<int,Transform> usedCoins)
+    private Action<int,Transform> attackEvent;
+    private ConfigurationSO config;
+    private int attackValue;
+    public void Init(int level, Action<EventHandler> coinsEvent, Action<int,Transform> attackAction,ConfigurationSO config )
     {
-        changeCoins = usedCoins;
+        attackEvent = attackAction;
         upgradeLevel = level;
+        this.config = config;
         upgradeButton.SetUp(level, CoinsCost(), false, Upgrade, coinsEvent, header);
+        attackValue = config.GetCoinsOnTap(upgradeLevel);
     }
     public void Upgrade()
     {
         int coinsToReduce = -CoinsCost();
+        Debug.LogError("Upgrade " + coinsToReduce + gameObject.name, gameObject);
         upgradeLevel++;
+        upgradeButton.Upgraded(upgradeLevel);
         upgradeButton.UpgradeCost(CoinsCost());
-        changeCoins.Invoke(coinsToReduce,transform);
+        attackEvent.Invoke(coinsToReduce, transform);
+        attackValue = config.GetCoinsOnTap(upgradeLevel);
     }
 
     private int CoinsCost()
     {
-        return 50;
+        return config.GetUpgradeCost(upgradeLevel);
     }
-    private int AttackValue()
-    {
-        return 1;
-    }
+   
 
     public virtual void Attack()
     {
-        changeCoins.Invoke(AttackValue(), transform);
+        attackEvent.Invoke(attackValue, transform);
     }
 }

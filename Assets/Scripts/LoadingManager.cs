@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -8,30 +6,27 @@ using UnityEngine.UI;
 
 public class LoadingManager : MonoBehaviour
 {
-    public ConfigurationSO configData;
-    public static string CONFIG_URL = @"https://raw.githubusercontent.com/ilija88urosevic/CirclesVsBlocks/main/Config.txt";
+    public static string CONFIG_URL = @"https://raw.githubusercontent.com/ilija88urosevic/CirclesVsBlocks/development/Config.txt";
     [SerializeField]
     private Image progressBarImage;
     private IEnumerator Start()
     {
-        if (PlayerPrefs.GetInt("FirstLoad", 0) == 0)
+      
+        if (SaveManager.GetInt("FirstLoad", 0) == 0)
         {
-            PlayerPrefs.SetString("ConfigData", configData.GetStringData());
-            PlayerPrefs.GetInt("FirstLoad", 1);
-            PlayerPrefs.Save();
+            SaveManager.SetString("ConfigData", GameManager.Instance.configuration.GetStringData());
+            SaveManager.GetInt("FirstLoad", 1);
 
         }
         yield return StartCoroutine(LoadConfig());
         yield return new WaitForSeconds(1);
         progressBarImage.fillAmount = 0.7f;
         AsyncOperation operation = SceneManager.LoadSceneAsync(1,LoadSceneMode.Single);
-        operation.allowSceneActivation = false;
         while(!operation.isDone)
         {
             progressBarImage.fillAmount = 0.7f + operation.progress*0.3f;
             yield return null;
         }
-        operation.allowSceneActivation = true;
     }
 
     private IEnumerator LoadConfig()
@@ -41,6 +36,7 @@ public class LoadingManager : MonoBehaviour
         www.SendWebRequest();
         while (!www.isDone)
         {
+            // Not really suported with github, here as a representation.
             progressBarImage.fillAmount = www.downloadProgress * 0.5f;
             yield return null;
         }
@@ -53,9 +49,9 @@ public class LoadingManager : MonoBehaviour
         {
             Debug.Log(www.downloadHandler.text);
             //Save For next loading.
-            PlayerPrefs.SetString("ConfigData", www.downloadHandler.text);
+            SaveManager.SetString("ConfigData", www.downloadHandler.text);
         }
-        configData.LoadData(PlayerPrefs.GetString("ConfigData"));
+        GameManager.Instance.LoadData(SaveManager.GetString("ConfigData"));
 
 
     }

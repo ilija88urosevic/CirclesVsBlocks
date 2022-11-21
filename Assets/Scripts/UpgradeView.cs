@@ -14,13 +14,13 @@ public class UpgradeView : MonoBehaviour
     private int coinsCost;
     private Action onClick;
 
-    public void SetUp(int level, int price,bool enabled, Action actionOnClick, EventHandler coinsEvent, string header)
+    public void SetUp(int level, int price,bool enabled, Action actionOnClick, Action<System.EventHandler> coinsEvent, string header)
     {
-        coinsCost = price;
         levelText.text = "Level: " + level;
-        priceText.text = coinsCost + "<sprite=0>";
+        UpgradeCost(price);
         headerText.text = header;
-        coinsEvent += CoinsUpdate;
+
+        coinsEvent.Invoke(CoinsUpdate);
         button.interactable = enabled;
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(UpgradeClick);
@@ -31,6 +31,10 @@ public class UpgradeView : MonoBehaviour
     {
         coinsCost = price;
         priceText.text = coinsCost + "<sprite=0>";
+    }
+    internal void Upgraded(int level)
+    {
+        levelText.text = "Level: " + level;
     }
 
     private void UpgradeClick()

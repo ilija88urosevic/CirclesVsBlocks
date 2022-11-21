@@ -7,10 +7,10 @@ public class HelperAttack : AttackerScript
 {
     public Animation attackAnimation;
     public WaitForSeconds oneSecond = new WaitForSeconds(1);
-    public new void Init(int level, EventHandler coinsEvent, Action<int,Transform> usedCoins)
+    public new void Init(int level, Action<EventHandler> coinsEvent, Action<int,Transform> attackAction, ConfigurationSO config)
     {
         StartCoroutine(AttackBlock());
-        base.Init(level,coinsEvent,usedCoins);
+        base.Init(level,coinsEvent, attackAction, config);
     }
 
     private IEnumerator AttackBlock()
@@ -19,8 +19,10 @@ public class HelperAttack : AttackerScript
         yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 2));
         while(true)
         {
+            Attack();
             yield return oneSecond;
         }
+        
     }
 
     public override void Attack()

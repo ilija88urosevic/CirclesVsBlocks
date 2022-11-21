@@ -443,7 +443,7 @@ Animation:
   m_GameObject: {fileID: 778542095}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 0}
+  m_Animation: {fileID: 7400000, guid: 8ecbbb3f21467314ab6f6909c71f9189, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 8ecbbb3f21467314ab6f6909c71f9189, type: 2}
   m_WrapMode: 0
@@ -903,7 +903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 745e726e11a9af640947d11d2e4b48e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configData: {fileID: 0}
+  configData: {fileID: 11400000, guid: 76ec3e809c05a9b48ba30ba9f202193f, type: 2}
   progressBarImage: {fileID: 1075014627}
 --- !u!1 &1620581860
 GameObject:
@@ -1049,7 +1049,7 @@ GameObject:
   - component: {fileID: 1729557769}
   - component: {fileID: 1729557768}
   m_Layer: 0
-  m_Name: GameDataManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1067,8 +1067,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7572982096dad244ba55ca4f6f8cc569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 0}
-  configuration: {fileID: 0}
+  playerData: {fileID: 11400000, guid: fe59cf6c5b61906429ef16d2d57fdfde, type: 2}
+  configuration: {fileID: 11400000, guid: 76ec3e809c05a9b48ba30ba9f202193f, type: 2}
 --- !u!4 &1729557769
 Transform:
   m_ObjectHideFlags: 0

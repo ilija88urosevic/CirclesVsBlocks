@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315212729e2fd944392f3d601f47fd1e, type: 3}
   m_Name: PlayerDataSO
   m_EditorClassIdentifier: 
+  playerData:
+    coins: 50
+    tapUpgradeLevels: 01000000

@@ -6,10 +6,12 @@ using UnityEngine;
 [Serializable]
 public class Configuration
 {
-    public float maxCircles = 5;
-    public float firstCircleCost = 100;
+    public int maxCircles = 5;
+    public int firstCircleCost = 100;
     public string goldPerTapFormula = "5*upgradeLevel^2.1";
     public string upgradeCostFormula = "5*1.08^upgradeLevel";
+    public int defaultCoins = 50;
+    public string defaultData = "1";
 
     public Configuration(string data)
     {
@@ -29,10 +31,26 @@ public class ConfigurationSO : ScriptableObject
 {
     [SerializeField] 
     private Configuration configuration;
+    internal int DefaultCoins => configuration.defaultCoins;
+    internal string DefaultData => configuration.defaultData;
+
+    internal int FirstCircleCost => configuration.firstCircleCost;
+    internal int MaxCircles => configuration.maxCircles;
+
     internal void LoadData(string data)
     {
         configuration = new Configuration(data);
     }
 
     internal string GetStringData() => configuration.ToString();
+
+    internal int GetUpgradeCost(int upgradeLevel)
+    {
+        return Mathf.RoundToInt( 5 * Mathf.Pow(1.08f, upgradeLevel));
+    }
+
+    internal int GetCoinsOnTap(int upgradeLevel)
+    {
+        return Mathf.RoundToInt(5 * Mathf.Pow(upgradeLevel,2.1f)); 
+    }
 }

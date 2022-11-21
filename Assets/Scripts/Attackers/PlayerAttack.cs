@@ -7,9 +7,10 @@ using UnityEngine.UI;
 public class PlayerAttack : AttackerScript
 {
     public Button attackButton;
-    public new void Init(int level, EventHandler coinsEvent, Action<int, Transform> usedCoins)
+    public new void Init(int level, Action<EventHandler> coinsEvent, Action<int, Transform> attackAction, ConfigurationSO config)
     {
         attackButton.onClick.AddListener(Attack);
-        base.Init(level, coinsEvent, usedCoins);
+        base.Init(level, coinsEvent, attackAction, config);
     }
+
 }
