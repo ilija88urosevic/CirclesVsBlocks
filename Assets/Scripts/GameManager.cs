@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
@@ -11,7 +10,7 @@ public class GameManager : MonoBehaviour
     public ConfigurationSO configuration;
     private void Awake()
     {
-        if(instance!=null && instance!=this)
+        if (instance!=null && instance!=this)
         {
             Destroy(gameObject);
             return;

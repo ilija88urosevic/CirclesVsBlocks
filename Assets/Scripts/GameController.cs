@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
@@ -12,6 +13,7 @@ public class GameController : MonoBehaviour
     public Transform circleHolder;
     public PlayerAttack player;
     public Button hireHelpers;
+    public Button resetGame;
     public TextMeshProUGUI hireHelpersCost;
     public GameObject maxHelpers;
     public TextMeshProUGUI hireHelpersPriceText;
@@ -23,16 +25,17 @@ public class GameController : MonoBehaviour
     private List<HelperAttack> helpers;
     private void Awake()
     {
-        //todo data
         config = GameManager.Instance.RequestConfig();
         data = GameManager.Instance.RequestData();
-        player.Init(data.PlayerLevel, coinsManager.Subscribe, Attacked, config);
+        coinsManager.Init(data);
+        helpers = new List<HelperAttack>();
+        resetGame.onClick.AddListener(ResetAndDelete);
+        player.Init(data, coinsManager.Subscribe, Attacked, config,0);
         foreach (var data in data.CircleLevels)
         {
-            SpawnHelper(false, data);
+            SpawnHelper(false, data, helpers.Count+1);
         }
 
-        coinsManager.SetCoins(data.Coins);
         hireHelpers.onClick.AddListener(BuyHelper);
         if (SaveManager.GetInt("FirstTutorial", 0) == 0)
         {
@@ -52,17 +55,25 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void ResetAndDelete()
+    {
+        PlayerPrefs.DeleteAll();
+        DestroyImmediate(GameManager.Instance);
+        SceneManager.LoadScene(0);
+    }
+
     private bool DisableHelpersButton()
     {
         return coinsManager.CurrentCoins < HelperCost() || config.MaxCircles <= helpers.Count;
     }
     private void BuyHelper()
     {
-        SpawnHelper(true, 1);
+        data.playerData.tapUpgradeLevels.Add(1); 
+        SpawnHelper(true, 1, helpers.Count+1);
         data.Save();
     }
 
-    private void SpawnHelper(bool reduceCoins, int level)
+    private void SpawnHelper(bool reduceCoins, int level, int id)
     {
         if (helpers == null)
         {
@@ -74,7 +85,7 @@ public class GameController : MonoBehaviour
             data.SaveCoins();
         }
         var newHelper = (Instantiate(circlePrefab, circleHolder)).GetComponent<HelperAttack>();
-        newHelper.Init(level, coinsManager.Subscribe, Attacked, config);
+        newHelper.Init(data, coinsManager.Subscribe, Attacked, config,id);
         helpers.Add(newHelper);
         if (DisableHelpersButton())
         {

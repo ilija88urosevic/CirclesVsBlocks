@@ -45,7 +45,17 @@ public class PlayerDataSO : ScriptableObject
 
     public List<int> CircleLevels => playerData.tapUpgradeLevels.AsEnumerable<int>().Skip(1).ToList<int>();
 
-    public int Coins => playerData.coins;
+    public int Coins
+    {
+        get
+        {
+            return playerData.coins;
+        }
+        set
+        {
+            playerData.coins = value;
+        }
+    }
 
     internal void LoadData(int defualtCoins, string defaultData)
     {

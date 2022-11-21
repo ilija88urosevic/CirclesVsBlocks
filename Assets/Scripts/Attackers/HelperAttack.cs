@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class HelperAttack : AttackerScript
 {
+    
     public Animation attackAnimation;
     public WaitForSeconds oneSecond = new WaitForSeconds(1);
-    public new void Init(int level, Action<EventHandler> coinsEvent, Action<int,Transform> attackAction, ConfigurationSO config)
+    public new void Init(PlayerDataSO data, Action<EventHandler> coinsEvent, Action<int,Transform> attackAction, ConfigurationSO config, int id)
     {
         StartCoroutine(AttackBlock());
-        base.Init(level,coinsEvent, attackAction, config);
+        base.Init(data,coinsEvent, attackAction, config,id);
     }
 
     private IEnumerator AttackBlock()

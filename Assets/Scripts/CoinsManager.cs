@@ -8,23 +8,23 @@ public class CoinsManager : MonoBehaviour
 {
     public TextMeshProUGUI coinsText;
     public event EventHandler coinsUpdate;
-    int currentCoins;
+    PlayerDataSO currentCoins;
 
-    public int CurrentCoins { get { return currentCoins; } }
+    public int CurrentCoins { get { return currentCoins.Coins; } }
 
-    internal void SetCoins(int amount)
+    internal void Init(PlayerDataSO data)
     {
-        currentCoins = amount;
+        currentCoins = data;
         if (coinsUpdate != null)
-            coinsUpdate(currentCoins, null);
-        coinsText.text = currentCoins.ToString();
+            coinsUpdate(currentCoins.Coins, null);
+        coinsText.text = currentCoins.Coins.ToString();
     }
     public void ChangeCoins(int amount)
     {
-        currentCoins += amount;
+        currentCoins.Coins += amount;
         if (coinsUpdate != null)
-            coinsUpdate(currentCoins, null);
-        coinsText.text = currentCoins.ToString();
+            coinsUpdate(currentCoins.Coins, null);
+        coinsText.text = currentCoins.Coins.ToString();
         
     }
 

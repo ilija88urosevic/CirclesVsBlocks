@@ -6,36 +6,39 @@ using UnityEngine.Events;
 
 public abstract class AttackerScript : MonoBehaviour
 {
+    private int id = 1;
     public string header;
     public UpgradeView upgradeButton;
-    private int upgradeLevel = 1;
-    private Action<int,Transform> attackEvent;
+    private PlayerDataSO playerData;
+    private Action<int, Transform> attackEvent;
     private ConfigurationSO config;
     private int attackValue;
-    public void Init(int level, Action<EventHandler> coinsEvent, Action<int,Transform> attackAction,ConfigurationSO config )
+    public void Init(PlayerDataSO data, Action<EventHandler> coinsEvent, Action<int, Transform> attackAction, ConfigurationSO config, int id)
     {
+
+        this.id = id;
         attackEvent = attackAction;
-        upgradeLevel = level;
+        playerData = data;
         this.config = config;
-        upgradeButton.SetUp(level, CoinsCost(), false, Upgrade, coinsEvent, header);
-        attackValue = config.GetCoinsOnTap(upgradeLevel);
+        upgradeButton.SetUp(playerData.playerData.tapUpgradeLevels[id], CoinsCost(), false, Upgrade, coinsEvent, header);
+        attackValue = config.GetCoinsOnTap(playerData.playerData.tapUpgradeLevels[id]);
     }
     public void Upgrade()
     {
         int coinsToReduce = -CoinsCost();
-        Debug.LogError("Upgrade " + coinsToReduce + gameObject.name, gameObject);
-        upgradeLevel++;
-        upgradeButton.Upgraded(upgradeLevel);
+        playerData.playerData.tapUpgradeLevels[id]++;
+        upgradeButton.Upgraded(playerData.playerData.tapUpgradeLevels[id]);
         upgradeButton.UpgradeCost(CoinsCost());
         attackEvent.Invoke(coinsToReduce, transform);
-        attackValue = config.GetCoinsOnTap(upgradeLevel);
+        attackValue = config.GetCoinsOnTap(playerData.playerData.tapUpgradeLevels[id]);
+        playerData.Save();
     }
 
     private int CoinsCost()
     {
-        return config.GetUpgradeCost(upgradeLevel);
+        return config.GetUpgradeCost(playerData.playerData.tapUpgradeLevels[id]);
     }
-   
+
 
     public virtual void Attack()
     {
