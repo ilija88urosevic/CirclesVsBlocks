@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LoadingManager : MonoBehaviour
 {
-    public static string CONFIG_URL = @"https://raw.githubusercontent.com/ilija88urosevic/CirclesVsBlocks/development/Config.txt";
+    public static string CONFIG_URL = @"https://raw.githubusercontent.com/ilija88urosevic/CirclesVsBlocks/main/Config.txt";
     [SerializeField]
     private Image progressBarImage;
     private IEnumerator Start()
