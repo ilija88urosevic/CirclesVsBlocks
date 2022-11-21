@@ -1,1 +1,1 @@
-5#100#5*upgradeLevel^2.1#5*1.08^upgradeLevel
+5#100#5*(upgradeLevel^2.1)#5*(1.08^upgradeLevel)
